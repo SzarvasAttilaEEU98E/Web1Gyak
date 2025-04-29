@@ -103,6 +103,199 @@
                         </ul>
                     </aside>
                 </article>
+                <?php elseif ($page === 'gallery'): ?>
+                <?php if (isset($_SESSION['user'])): ?>
+                    <article>
+                        <header>
+                            <h3>Képgaléria</h3>
+                        </header>
+                        <section>
+                            <div class="gallery">
+                                <?php if (!empty($gallery_images)): ?>
+                                    <?php foreach ($gallery_images as $image): ?>
+                                        <figure>
+                                            <img src="<?php echo $image; ?>" alt="Galéria kép" width="200" loading="lazy">
+                                            <figcaption><?php echo basename($image); ?></figcaption>
+                                        </figure>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p>Nincsenek feltöltött képek a galériában.</p>
+                                <?php endif; ?>
+                            </div>
+                        </section>
+                    </article>
+                <?php else: ?>
+                    <p style="color: red;">Kérlek, jelentkezz be a képek megtekintéséhez!</p>
+                <?php endif; ?>
 
+            <?php elseif ($page === 'messages'): ?>
+                <?php if (isset($_SESSION['user'])): ?>
+                    <article>
+                        <table border="1">
+                            <thead>
+                                <tr>
+                                    <th>Név</th>
+                                    <th>Email</th>
+                                    <th>Üzenet</th>
+                                    <th>Küldés ideje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($messages)): ?>
+                                    <?php foreach ($messages as $message): ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($message['name']); ?></td>
+                                            <td><?php echo htmlspecialchars($message['email']); ?></td>
+                                            <td><?php echo htmlspecialchars($message['message']); ?></td>
+                                            <td><?php echo $message['created_at']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="4">Nincsenek üzenetek.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </article>
+                <?php else: ?>
+                    <p style="color: red;">Kérlek, jelentkezz be az üzenetek megtekintéséhez!</p>
+                <?php endif; ?>
+
+            <?php elseif ($page === 'contact'): ?>
+                <article>
+                    <header>
+                        <h3>Kapcsolat</h3>
+                    </header>
+                    <section>
+                        <form method="POST" action="index.php?page=contact" onsubmit="return validateContactForm()">
+                            <label for="name">Név:</label><br><br>
+                            <input type="text" id="name" name="name" autocomplete="name"><br><br>
+                            <label for="email">Email:</label><br><br>
+                            <input type="email" id="email" name="email" autocomplete="email"><br><br>
+                            <label for="message">Üzenet:</label><br><br>
+                            <textarea id="message" name="message" rows="5" cols="30"></textarea><br><br><br>
+                            <button type="submit" name="contact">Küldés</button>
+                        </form>
+                    </section>
+                    <section>
+                        <h3>Adatlap</h3>
+                        <dl>
+                            <dt>Cégnév:</dt>
+                            <dd>FoodDeliveryApp Kft.</dd>
+                            <dt>Email:</dt>
+                            <dd><a href="mailto:info@fooddeliveryapp.hu">info@fooddeliveryapp.hu</a></dd>
+                            <dt>Telefonszám:</dt>
+                            <dd>+36 123 456 789</dd>
+                        </dl>
+                    </section>
+                </article>
+                <script>
+                    function validateContactForm() {
+                        const name = document.getElementById('name').value.trim();
+                        const email = document.getElementById('email').value.trim();
+                        const message = document.getElementById('message').value.trim();
+                        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                        if (name === '') {
+                            alert('Kérlek, add meg a neved!');
+                            return false;
+                        }
+                        if (!emailPattern.test(email)) {
+                            alert('Kérlek, adj meg egy érvényes email címet!');
+                            return false;
+                        }
+                        if (message === '') {
+                            alert('Kérlek, írj üzenetet!');
+                            return false;
+                        }
+                        if (message.length < 10) {
+                            alert('Az üzenetnek legalább 10 karakterből kell állnia!');
+                            return false;
+                        }
+                        return true;
+                    }
+                </script>
+
+            <?php elseif ($page === 'login'): ?>
+                <?php if (!isset($_SESSION['user'])): ?>
+                    <article>
+                        <header>
+                            <h3>Bejelentkezés</h3>
+                        </header>
+                        <section>
+                            <form method="POST" action="index.php?page=login">
+                                <label for="username">Felhasználónév:</label><br><br>
+                                <input type="text" id="username" name="username" autocomplete="username"><br><br>
+                                <label for="password">Jelszó:</label><br><br>
+                                <input type="password" id="password" name="password" autocomplete="current-password"><br><br><br>
+                                <button type="submit" name="login">Bejelentkezés</button>
+                            </form>
+                            <p>Nincs még fiókod?</p>
+                            <button onclick="window.location.href='index.php?page=register'" class="secondary-button">Regisztrálj itt!</button>
+                        </section>
+                    </article>
+                <?php else: ?>
+                    <p>Már be vagy jelentkezve!</p>
+                <?php endif; ?>
+
+            <?php elseif ($page === 'register'): ?>
+                <?php if (!isset($_SESSION['user'])): ?>
+                    <article>
+                        <header>
+                            <h3>Regisztráció</h3>
+                        </header>
+                        <section>
+                            <form method="POST" action="index.php?page=register">
+                                <label for="family_name">Családi név:</label><br><br>
+                                <input type="text" id="family_name" name="family_name" autocomplete="family-name"><br><br>
+                                <label for="given_name">Utónév:</label><br><br>
+                                <input type="text" id="given_name" name="given_name" autocomplete="given-name"><br><br>
+                                <label for="username">Felhasználónév:</label><br><br>
+                                <input type="text" id="username" name="username" minlength="3" autocomplete="username"><br><br>
+                                <label for="password">Jelszó:</label><br><br>
+                                <input type="password" id="password" name="password" minlength="6" autocomplete="new-password"><br><br><br>
+                                <button type="submit" name="register">Regisztráció</button>
+                            </form>
+                            <p>Már van fiókod? <a href="index.php?page=login">Jelentkezz be itt!</a></p>
+                        </section>
+                    </article>
+                <?php else: ?>
+                    <p>Már be vagy jelentkezve!</p>
+                <?php endif; ?>
+
+            <?php elseif ($page === 'upload'): ?>
+                <?php if (isset($_SESSION['user'])): ?>
+                    <article>
+                        <header>
+                            <h3>Képfeltöltés</h3>
+                        </header>
+                        <section>
+                            <form method="POST" action="index.php?page=upload" enctype="multipart/form-data">
+                                <label for="image">Válassz képet a galériába:</label><br><br>
+                                <input type="file" id="image" name="image" accept="image/jpeg,image/png"><br><br><br>
+                                <button type="submit" name="upload">Feltöltés</button>
+                            </form>
+                        </section>
+                        <?php if (isset($uploaded_image)): ?>
+                            <figure>
+                                <img src="<?php echo $uploaded_image; ?>" alt="Feltöltött kép" width="200" loading="lazy">
+                                <figcaption>Feltöltött kép</figcaption>
+                            </figure>
+                        <?php endif; ?>
+                    </article>
+                <?php else: ?>
+                    <p style="color: red;">Kérlek, jelentkezz be a képfeltöltéshez!</p>
+                <?php endif; ?>
+
+            <?php endif; ?>
+        </section>
+    </main>
+    <footer>
+        <address>
+            <p><?php echo $config['common_data']['footer']; ?></p>
+            <p>Kapcsolat: <a href="mailto:info@fooddeliveryapp.hu">info@fooddeliveryapp.hu</a></p>
+        </address>
+    </footer>
         </body>
     </html>
