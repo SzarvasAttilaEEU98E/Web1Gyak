@@ -136,6 +136,6 @@ if ($page === 'logout') {
     header('Location: index.php?page=home');
     exit;
 }
-
+//
 // HTML fájl betöltése
 include 'main.html';
