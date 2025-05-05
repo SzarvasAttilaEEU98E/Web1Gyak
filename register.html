@@ -28,7 +28,7 @@
                     <li><a href="index.php?page=logout">Kilépés</a></li>
                 <?php endif; ?>
             </ul>
-            <!-- Bejelentkezett felhasználó jelzése -->
+            <!-- Bejelentkezett felhasználó jelzése //-->
             <?php if (isset($_SESSION['user'])): ?>
                 <div class="user-info">
                     Bejelentkezett: <?php echo htmlspecialchars($_SESSION['user']['family_name']); ?> <?php echo htmlspecialchars($_SESSION['user']['given_name']); ?> (<?php echo htmlspecialchars($_SESSION['user']['username']); ?>)
