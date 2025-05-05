@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
 INSERT INTO messages (name, email, message) VALUES
 ('Teszt Felhasználó', 'teszt@example.com', 'Ez egy teszt üzenet.'),
 ('Minta Péter', 'peter@example.com', 'Szeretnék rendelni egy pizzát!'),
-('Kovács Anna', 'anna@example.com', 'Mikor érkezik meg a rendelésem?');
+('Kovács Anna', 'anna@example.com', 'Mikor érkezik meg  a rendelésem?');
 
 INSERT INTO users (family_name, given_name, username, password) VALUES
 ('Teszt', 'Felhasználó', 'user', 'pass123');
