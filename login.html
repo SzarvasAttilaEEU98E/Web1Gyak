@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bejelentkezés - FoodDeliveryApp">
+    <title>Bejelentkezés - FoodDeliveryApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Felső menüsáv (narancssárga) -->
+    <nav class="top-menu" aria-label="Navigáció">
+        <div class="menu-container">
+            <ul>
+                <?php foreach ($config['menu'] as $key => $menu_item): ?>
+                    <?php if ($key !== 'logout' && $key !== 'login' && $key !== 'register'): ?>
+                        <?php if ($key !== 'upload' && $key !== 'messages' && $key !== 'gallery' || ($key === 'upload' && isset($_SESSION['user'])) || ($key === 'messages' && isset($_SESSION['user'])) || ($key === 'gallery' && isset($_SESSION['user']))): ?>
+                            <li><a href="index.php?page=<?php echo $key; ?>" aria-current="<?php echo $page === $key ? 'page' : 'false'; ?>"><?php echo $menu_item['title']; ?></a></li>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                <?php if (!isset($_SESSION['user'])): ?>
+                    <li><a href="index.php?page=login">Bejelentkezés</a></li>
+                    <li><a href="index.php?page=register">Regisztráció</a></li>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['user'])): ?>
+                    <li><a href="index.php?page=logout">Kilépés</a></li>
+                <?php endif; ?>
+            </ul>
+            <!-- Bejelentkezett felhasználó jelzése -->
+            <?php if (isset($_SESSION['user'])): ?>
+                <div class="user-info">
+                    Bejelentkezett: <?php echo htmlspecialchars($_SESSION['user']['family_name']); ?> <?php echo htmlspecialchars($_SESSION['user']['given_name']); ?> (<?php echo htmlspecialchars($_SESSION['user']['username']); ?>)
+                </div>
+            <?php endif; ?>
+        </div>
+    </nav>
+
+    <main>
+        <section id="content" aria-labelledby="page-title">
+            <h2 id="page-title">Bejelentkezés</h2>
+            <?php if (isset($error)): ?>
+                <p style="color: red;"><?php echo $error; ?></p>
+            <?php endif; ?>
+            <?php if (isset($success)): ?>
+                <p style="color: green;"><?php echo $success; ?></p>
+            <?php endif; ?>
+
+            <?php if (!isset($_SESSION['user'])): ?>
+                <article>
+                    <header>
+                        <h3>Bejelentkezés</h3>
+                    </header>
+                    <section>
+                        <form method="POST" action="index.php?page=login">
+                            <label for="username">Felhasználónév:</label><br><br>
+                            <input type="text" id="username" name="username" autocomplete="username"><br><br>
+                            <br>
+                            <label for="password">Jelszó:</label><br><br>
+                            <input type="password" id="password" name="password" autocomplete="current-password"><br><br><br>
+                            <br>
+                            <button type="submit" name="login">Bejelentkezés</button>
+                        </form>
+                        <p>Nincs még fiókod?</p>
+                        <button onclick="window.location.href='index.php?page=register'" class="secondary-button">Regisztrálj itt!</button>
+                    </section>
+                </article>
+            <?php else: ?>
+                <p>Már be vagy jelentkezve!</p>
+            <?php endif; ?>
+        </section>
+    </main>
+    <footer>
+        <address>
+            <p><?php echo $config['common_data']['footer']; ?></p>
+            <p>Kapcsolat: <a href="mailto:info@fooddeliveryapp.hu">info@fooddeliveryapp.hu</a></p>
+        </address>
+    </footer>
+</body>
+</html>
