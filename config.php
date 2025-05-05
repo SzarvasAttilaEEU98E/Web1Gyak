@@ -14,4 +14,5 @@ $config = [
         'app_name' => 'FoodDeliveryApp',
         'footer' => '© 2023 FoodDeliveryApp. Minden jog fenntartva.'
     ]
+    //
 ];
